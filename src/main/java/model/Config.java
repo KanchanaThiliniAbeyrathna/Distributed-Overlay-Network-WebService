@@ -1,5 +1,6 @@
 package model;
 
+
 /**
  * Created by Thilini on 11/5/2017.
  */
@@ -36,4 +37,6 @@ public class Config {
     public static final String STATOK = "STATOK";
     public static final String QUERY = "QUERY";
     public static final String CLEAR = "CLEAR";
+    public static final String PING = "PING";
+    public static final String PINGOK = "PINGOK";
 }

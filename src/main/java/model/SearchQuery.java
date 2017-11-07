@@ -1,62 +1,71 @@
 package model;
 
+
 /**
  * Created by Thilini on 11/5/2017.
  */
 
 public class SearchQuery {
 	private Node originNode;
-	private Node senderNode;
-	private String queryText;
-	private int hops;
-	private String timestamp;
+    private Node senderNode;
+    private String queryText;
+    private int hops;
+    private long timestamp;
 
-	public SearchQuery(Node originNode, String queryText, int hops) {
-		this.originNode = originNode;
-		this.queryText = queryText;
-		this.hops = hops;
-	}
 
-	public SearchQuery() {
-	}
+    public SearchQuery(Node originNode, String queryText, int hops) {
+        this.originNode = originNode;
+        this.queryText = queryText;
+        this.hops = hops;
+    }
+    
+    public SearchQuery(Node originNode, String queryText, int hops, long timestamp) {
+        this.originNode = originNode;
+        this.queryText = queryText;
+        this.hops = hops;
+        this.timestamp = timestamp;
+    }
 
-	public Node getOriginNode() {
-		return originNode;
-	}
+    public SearchQuery() {
+    }
 
-	public void setOriginNode(Node originNode) {
-		this.originNode = originNode;
-	}
+    public Node getOriginNode() {
+        return originNode;
+    }
 
-	public Node getSenderNode() {
-		return senderNode;
-	}
+    public void setOriginNode(Node originNode) {
+        this.originNode = originNode;
+    }
 
-	public void setSenderNode(Node senderNode) {
-		this.senderNode = senderNode;
-	}
+    public Node getSenderNode() {
+        return senderNode;
+    }
 
-	public String getQueryText() {
-		return queryText;
-	}
+    public void setSenderNode(Node senderNode) {
+        this.senderNode = senderNode;
+    }
 
-	public void setQueryText(String queryText) {
-		this.queryText = queryText;
-	}
+    public String getQueryText() {
+        return queryText;
+    }
 
-	public int getHops() {
-		return hops;
-	}
+    public void setQueryText(String queryText) {
+        this.queryText = queryText;
+    }
 
-	public void setHops(int hops) {
-		this.hops = hops;
-	}
+    public int getHops() {
+        return hops;
+    }
 
-	public String getTimestamp() {
-		return timestamp;
-	}
+    public void setHops(int hops) {
+        this.hops = hops;
+    }
 
-	public void setTimestamp(String timestamp) {
-		this.timestamp = timestamp;
-	}
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
 }
