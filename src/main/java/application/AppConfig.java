@@ -1,6 +1,7 @@
 package application;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -23,8 +24,16 @@ public class AppConfig extends WebMvcConfigurerAdapter{
 	@Autowired
 	private ServletContext context;
 	
+	@Autowired
+    private HttpServletRequest httpRequest;
+	
 	@Bean
 	public NetworkService getStudentervice(){
 		return new NetworkService();
 	}
+	
+//	@Bean
+//	public MovieController getmovieController(){
+//		return MovieController.getInstance("../../resources/File Names.txt");
+//	}
 }
