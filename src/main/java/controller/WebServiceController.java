@@ -50,7 +50,7 @@ public class WebServiceController {
 		return new ResponseEntity<String>("working", HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "connect", method = RequestMethod.GET)
+	@RequestMapping(value = "register", method = RequestMethod.GET)
 	public ResponseEntity<String> connect(@RequestParam(value = "bootstrap_ip", required = true) String bootstrap_ip,
 			@RequestParam(value = "bootstrap_port", required = true) String bootstrap_port,
 			@RequestParam(value = "node_ip", required = true) String node_ip,
@@ -102,14 +102,19 @@ public class WebServiceController {
 		net.clearSearchResults();
         String movie = query.trim().replace(" ", "_");
         net.startSearch(movie);
-        new java.util.Timer().schedule( 
-			new java.util.TimerTask() {
-				@Override
-				public void run() {
-					// for timeout
-				}
-			}, 30000 
-        );
+//        new java.util.Timer().schedule( 
+//			new java.util.TimerTask() {
+//				@Override
+//				public void run() {
+//					logger.info("searching");
+//				}
+//			}, 60000 
+//        );
+        try {
+			Thread.sleep(15000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
         List<SearchResult> searchresults=net.getSearchResults();
         if (searchresults.size() > 0){
         	return new ResponseEntity<List<SearchResult>>(searchresults, HttpStatus.OK);

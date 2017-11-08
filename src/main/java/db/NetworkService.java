@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.BasicConfigurator;
@@ -123,13 +124,42 @@ public class NetworkService {
 		result.setHops(0);
 		result.setTimestamp(query.getTimestamp());
 
-		for (Node peer : neighbours) {
+		List<Node> randoms = this.getRandom3nodes();
+		for (Node peer : randoms) {
 			searchRequest(peer, query);
+			System.out.println(peer.getPort_no());
 		}
-
 		searchResponce(query.getOriginNode(), result);
-
 	}
+
+	public List<Node> getRandom3nodes() {
+		if (neighbours.size() <= 3) {
+			return neighbours;
+		} else {
+			Random r = new Random();
+			int Low = 0;
+			int High = neighbours.size();
+			int random_1 = r.nextInt(High - Low) + Low;
+			int random_2 = r.nextInt(High - Low) + Low;
+			int random_3 = r.nextInt(High - Low) + Low;
+			while (random_1 == random_2) {
+				random_2 = r.nextInt(High - Low) + Low;
+			}
+			while (random_1 == random_3) {
+				random_3 = r.nextInt(High - Low) + Low;
+			}
+			while (random_2 == random_3) {
+				random_3 = r.nextInt(High - Low) + Low;
+			}
+
+			List<Node> randoms = new ArrayList<Node>();
+			randoms.add(neighbours.get(random_1));
+			randoms.add(neighbours.get(random_2));
+			randoms.add(neighbours.get(random_3));
+			return randoms;
+		}
+	}
+
 
 	public boolean searchRequest(Node peer, SearchQuery query) {
 		String msg = Config.SER + " " + Config.IP + " " + Config.PORT + " " + query.getQueryText() + " "

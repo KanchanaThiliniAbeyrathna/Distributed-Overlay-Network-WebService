@@ -61,7 +61,6 @@ public class MovieController {
 				}
 			}
 		}
-
 		return instance;
 	}
 
@@ -109,7 +108,7 @@ public class MovieController {
 		List<String> foundList = new ArrayList<String>();
 		String otherQuery = null;
 
-		String thisQuery = query.toLowerCase().replaceAll(" ", "_");
+		String thisQuery = "_"+query.toLowerCase().replaceAll(" ", "_")+"_";
 
 		if (query != null && !query.trim().equals("")) {
 
