@@ -175,7 +175,7 @@ public class NetworkService {
 
 	private boolean checkQueryList(SearchQuery query) {
 		for (SearchQuery q : searchQueryList) {
-			if (q.getQueryText().equals(query.getQueryText())) {
+			if (q.getQueryText().equals(query.getQueryText()) && (q.getTimestamp()==query.getTimestamp())) {
 				return true;
 			}
 		}
