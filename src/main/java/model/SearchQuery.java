@@ -1,6 +1,5 @@
 package model;
 
-
 /**
  * Created by Thilini on 11/5/2017.
  */
@@ -25,6 +24,15 @@ public class SearchQuery {
         this.hops = hops;
         this.timestamp = timestamp;
     }
+    
+    public SearchQuery(Node originNode, Node senderNode, String queryText, int hops, long timestamp) {
+		super();
+		this.originNode = originNode;
+		this.senderNode = senderNode;
+		this.queryText = queryText;
+		this.hops = hops;
+		this.timestamp = timestamp;
+	}
 
     public SearchQuery() {
     }

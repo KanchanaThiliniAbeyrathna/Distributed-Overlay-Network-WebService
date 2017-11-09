@@ -49,28 +49,26 @@ public class NetworkService {
 		BasicConfigurator.configure();
 
 	}
-	
+
 	public void update() throws IOException {
 		int MINUTES = 1; // The delay in minutes
 		Timer timer = new Timer();
-		 timer.schedule(new TimerTask() {
-		    @Override
-		    public void run() { // Function runs every MINUTES minutes.
-		        // Run the code you want here
-				neighbours.forEach((a) -> {	
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() { // Function runs every MINUTES minutes.
+				// Run the code you want here
+				neighbours.forEach((a) -> {
 					a.setStatus("InActive");
 					String timeStamp = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new Date());
 					a.setUpdateTime(timeStamp);
 					String pingMsg = Config.PING + " " + Config.IP + " " + Config.PORT;
-					sender(pingMsg,a);
+					sender(pingMsg, a);
 				});
-		        //CLASSB.funcb(); // If the function you wanted was static
-		    }
-		 }, 0, 1000 * 60 * MINUTES);
-		 
-			
-			
-		}
+				// CLASSB.funcb(); // If the function you wanted was static
+			}
+		}, 0, 1000 * 60 * MINUTES);
+
+	}
 
 	public void run() throws IOException {
 
@@ -180,10 +178,10 @@ public class NetworkService {
 		}
 	}
 
-
 	public boolean searchRequest(Node peer, SearchQuery query) {
 		String msg = Config.SER + " " + Config.IP + " " + Config.PORT + " " + query.getQueryText() + " "
-				+ query.getHops() + " " + query.getTimestamp();
+				+ query.getHops() + " " + query.getTimestamp() + " " + query.getOriginNode().getIP_address() + " "
+				+ query.getOriginNode().getPort_no();
 		sender(msg, new Node(peer.getIP_address(), peer.getPort_no()));
 		return true;
 	}
@@ -194,13 +192,13 @@ public class NetworkService {
 		for (String m : result.getMovies()) {
 			msg += " " + m;
 		}
-		sender(msg, new Node(result.getOrginNode().getIP_address(), result.getOrginNode().getPort_no()));
+		sender(msg, originNode);
 		return true;
 	}
 
 	private boolean checkQueryList(SearchQuery query) {
 		for (SearchQuery q : searchQueryList) {
-			if (q.getQueryText().equals(query.getQueryText()) && (q.getTimestamp()==query.getTimestamp())) {
+			if (q.getQueryText().equals(query.getQueryText()) && (q.getTimestamp() == query.getTimestamp())) {
 				return true;
 			}
 		}
@@ -376,10 +374,13 @@ public class NetworkService {
 			String query = tokenizer.nextToken();
 			int hops = Integer.parseInt(tokenizer.nextToken());
 			long timestamp = Long.parseLong(tokenizer.nextToken());
-			System.out.println("here come serch");
-			System.out.println(timestamp);
+			String origin_ip = tokenizer.nextToken();
+			int origin_port = Integer.parseInt(tokenizer.nextToken());
+			
+			logger.info("here come serch");
+			logger.info(timestamp);
 
-			search(new SearchQuery(new Node(ip, port), query, hops, timestamp));
+			search(new SearchQuery(new Node(origin_ip, origin_port),new Node(ip, port), query, hops, timestamp));
 
 		} else if (Config.SEROK.equals(command)) {
 			int no_files = Integer.parseInt(tokenizer.nextToken());
@@ -412,25 +413,26 @@ public class NetworkService {
 			// result.getOrginNode().getPort_no());
 			// UpdateTheCMD(output);
 
-		}else if (Config.PING.equals(command)) {
-			receivedMessages --;
+		} else if (Config.PING.equals(command)) {
+			receivedMessages--;
 			String host = tokenizer.nextToken();
 			String hostport = tokenizer.nextToken();
-			Node temp = new Node(host, Integer.parseInt(hostport));					
+			Node temp = new Node(host, Integer.parseInt(hostport));
 			String pingMsg = Config.PINGOK + " " + Config.IP + " " + Config.PORT;
-			sender(pingMsg,temp);
+			sender(pingMsg, temp);
 			sentMessages--;
-			
-		}else if (Config.PINGOK.equals(command)) {
-			receivedMessages --;
+
+		} else if (Config.PINGOK.equals(command)) {
+			receivedMessages--;
 			String host = tokenizer.nextToken();
 			String hostport = tokenizer.nextToken();
 			int port = Integer.parseInt(hostport);
-			Node tempnode = neighbours.stream().filter(node -> port == node.getPort_no()).collect(Collectors.toList()).get(0);
+			Node tempnode = neighbours.stream().filter(node -> port == node.getPort_no()).collect(Collectors.toList())
+					.get(0);
 			tempnode.setStatus("Active");
 			String timeStamp = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new Date());
 			tempnode.setUpdateTime(timeStamp);
-			
+
 		} else {
 			unAnsweredMessages++;
 		}
