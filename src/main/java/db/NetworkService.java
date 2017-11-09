@@ -12,6 +12,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.StringTokenizer;
+import java.util.Timer;
+import java.util.stream.Collectors;
+import java.util.*;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
@@ -49,6 +52,28 @@ public class NetworkService {
 		BasicConfigurator.configure();
 
 	}
+	
+	public void update() throws IOException {
+		int MINUTES = 1; // The delay in minutes
+		Timer timer = new Timer();
+		 timer.schedule(new TimerTask() {
+		    @Override
+		    public void run() { // Function runs every MINUTES minutes.
+		        // Run the code you want here
+				neighbours.forEach((a) -> {	
+					a.setStatus("InActive");
+					String timeStamp = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new Date());
+					a.setUpdateTime(timeStamp);
+					String pingMsg = Config.PING + " " + Config.IP + " " + Config.PORT;
+					sender(pingMsg,a);
+				});
+		        //CLASSB.funcb(); // If the function you wanted was static
+		    }
+		 }, 0, 1000 * 60 * MINUTES);
+		 
+			
+			
+		}
 
 	public void run() throws IOException {
 
@@ -393,27 +418,25 @@ public class NetworkService {
 			// result.getOrginNode().getPort_no());
 			// UpdateTheCMD(output);
 
-		} else if (Config.PING.equals(command)) {
+		}else if (Config.PING.equals(command)) {
+			receivedMessages --;
 			String host = tokenizer.nextToken();
 			String hostport = tokenizer.nextToken();
-			Node temp = new Node(host, Integer.parseInt(hostport));
+			Node temp = new Node(host, Integer.parseInt(hostport));					
 			String pingMsg = Config.PINGOK + " " + Config.IP + " " + Config.PORT;
-			sender(pingMsg, temp);
-
-		} else if (Config.PINGOK.equals(command)) {
+			sender(pingMsg,temp);
+			sentMessages--;
+			
+		}else if (Config.PINGOK.equals(command)) {
+			receivedMessages --;
 			String host = tokenizer.nextToken();
 			String hostport = tokenizer.nextToken();
-			String hoststatus = "Active";
-			String hosttimeStamp = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new Date());
-			Node temp = new Node(host, Integer.parseInt(hostport), hoststatus, hosttimeStamp);
-			// String joinMsg = Config.JOIN + " " + Config.IP + " " +
-			// Config.PORT;
-			// sender(joinMsg, temp);
-			// addNeighbour(temp);
-			// System.out.println(neighbours.indexOf(new
-			// Node(host,Integer.parseInt(hostport))));
-			// Update the routing table
-
+			int port = Integer.parseInt(hostport);
+			Node tempnode = neighbours.stream().filter(node -> port == node.getPort_no()).collect(Collectors.toList()).get(0);
+			tempnode.setStatus("Active");
+			String timeStamp = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new Date());
+			tempnode.setUpdateTime(timeStamp);
+			
 		} else {
 			unAnsweredMessages++;
 		}

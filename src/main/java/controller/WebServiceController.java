@@ -70,6 +70,16 @@ public class WebServiceController {
 			}
 		};
 		thread1.start();
+		Thread thread2 = new Thread() {
+            public void run() {
+                try {
+                    net.update();
+                } catch (IOException e) {
+                    logger.error(e);
+                }
+            }
+        };
+        thread2.start();
 		return new ResponseEntity<String>("connected", HttpStatus.OK);
 	}
 	
