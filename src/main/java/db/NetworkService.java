@@ -45,9 +45,6 @@ public class NetworkService {
 	private List<SearchResult> searchResultList = new ArrayList<>();
 	private final Node myNode = new Node();
 
-	private int noOfLocalResults = 0;
-	private String localQuerry = "";
-
 	public NetworkService() {
 		BasicConfigurator.configure();
 
@@ -129,8 +126,6 @@ public class NetworkService {
 	}
 
 	public synchronized void startSearch(String queryText) {
-		noOfLocalResults = 0;
-		localQuerry = queryText;
 
 		SearchQuery query = new SearchQuery();
 		query.setOriginNode(myNode);
@@ -205,7 +200,7 @@ public class NetworkService {
 
 	private boolean checkQueryList(SearchQuery query) {
 		for (SearchQuery q : searchQueryList) {
-			if (q.getQueryText().equals(query.getQueryText())) {
+			if (q.getQueryText().equals(query.getQueryText()) && (q.getTimestamp()==query.getTimestamp())) {
 				return true;
 			}
 		}
@@ -408,7 +403,6 @@ public class NetworkService {
 			if (moviesCount > 0) {
 				this.searchResultList.add(result);
 
-				logger.info(" Result : " + ++noOfLocalResults + "  [ Query = " + localQuerry + "]");
 				this.printSearchResults();
 			}
 			// String output = String.format("Number of movies: %d\nMovies:
