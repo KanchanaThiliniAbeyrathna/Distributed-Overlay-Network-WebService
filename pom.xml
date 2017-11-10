@@ -4,25 +4,24 @@
 	<groupId>Distributed-Overlay-Network-WebService</groupId>
 	<artifactId>Distributed-Overlay-Network-WebService</artifactId>
 	<version>1</version>
-	<packaging>war</packaging>
 	<name>Distributed-Overlay-Network-WebService</name>
 	<description>A simple overlay-based solution using web services that allows a set of nodes to share contents </description>
-	
+
 	<dependencies>
-	
+
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.1.0</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<version>4.3.2.RELEASE</version>
-		</dependency>	
-		
+		</dependency>
+
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
@@ -40,11 +39,11 @@
 			<artifactId>log4j</artifactId>
 			<version>1.2.17</version>
 		</dependency>
-		
+
 	</dependencies>
 
 	<build>
-	<finalName>webservice</finalName>
+		<finalName>webservice</finalName>
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -56,7 +55,18 @@
 						<target>1.8</target>
 					</configuration>
 				</plugin>
+				<!-- Tomcat plugin -->
+				<plugin>
+					<groupId>org.apache.tomcat.maven</groupId>
+					<artifactId>tomcat7-maven-plugin</artifactId>
+					<version>2.2</version>
+					<configuration>
+						<port>8080</port>
+						<path>/</path>
+					</configuration>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
+	<packaging>war</packaging>
 </project>
