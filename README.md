@@ -4,13 +4,12 @@
 Develop a simple overlay-based solution using web services that allows a set of nodes to share contents (e.g., music files) among each other.
 
 ## Run
-Open project in Eclipse IDE
 
-Add Tomcat to your IDE
+Open CMD and go to your project folder 
 
-Right click on the project and then select Run As --> Run on Server
+run this command to build and run the project: mvn clean install tomcat7:run
 
-API is available at http://localhost:8080/Distributed-Overlay-Network-WebService/
+API is available at http://localhost:8080/webservice/
 
 ## Group Members
 130001H A. H. K. T. Aberathne

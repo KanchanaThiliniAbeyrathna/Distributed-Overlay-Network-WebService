@@ -54,9 +54,10 @@ public class WebServiceController {
 	public ResponseEntity<String> connect(@RequestParam(value = "bootstrap_ip", required = true) String bootstrap_ip,
 			@RequestParam(value = "bootstrap_port", required = true) String bootstrap_port,
 			@RequestParam(value = "node_ip", required = true) String node_ip,
+			@RequestParam(value = "port", required = true) String port,
 			@RequestParam(value = "username", required = true) String username) {
 		Config.IP = node_ip;
-		Config.PORT = httpRequest.getLocalPort();
+		Config.PORT = Integer.parseInt(port);
 		Config.USERNAME = username;
 		Config.BOOTSTRAP_IP = bootstrap_ip;
 		Config.BOOTSTRAP_PORT = Integer.parseInt(bootstrap_port);
