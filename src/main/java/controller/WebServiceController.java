@@ -54,10 +54,8 @@ public class WebServiceController {
 	public ResponseEntity<String> connect(@RequestParam(value = "bootstrap_ip", required = true) String bootstrap_ip,
 			@RequestParam(value = "bootstrap_port", required = true) String bootstrap_port,
 			@RequestParam(value = "node_ip", required = true) String node_ip,
-			@RequestParam(value = "port", required = true) String port,
 			@RequestParam(value = "username", required = true) String username) {
 		Config.IP = node_ip;
-		Config.PORT = Integer.parseInt(port);
 		Config.USERNAME = username;
 		Config.BOOTSTRAP_IP = bootstrap_ip;
 		Config.BOOTSTRAP_PORT = Integer.parseInt(bootstrap_port);
@@ -146,9 +144,27 @@ public class WebServiceController {
 		return new ResponseEntity<String>("Statistics are cleared", HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "test", method = RequestMethod.GET)
+	public ResponseEntity<String> test() {
+		//net.unRegister();
+		return new ResponseEntity<String>(Config.USERNAME +" is unregisterd successfully", HttpStatus.OK);
+	}
+	
 	@RequestMapping(value = "routingtable", method = RequestMethod.GET)
 	public ResponseEntity<String> routingtable() {
 		String table= net.routingTable();
 		return new ResponseEntity<String>(table, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "requestallstats", method = RequestMethod.GET)
+	public ResponseEntity<String> requestallstats() {
+		net.sendstat();
+		return new ResponseEntity<String>(Config.USERNAME +" request statistics", HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "summery", method = RequestMethod.GET)
+	public ResponseEntity<String> summery() throws IOException {
+		net.getSummery();
+		return new ResponseEntity<String>("Summery is printed successfully", HttpStatus.OK);
 	}
 }

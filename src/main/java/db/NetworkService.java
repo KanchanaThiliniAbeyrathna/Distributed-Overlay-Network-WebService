@@ -31,6 +31,7 @@ import model.Statistics;
 
 public class NetworkService {
 	final static private Logger logger = Logger.getLogger(NetworkService.class);
+	QueryHandler queryHandler = new QueryHandler();
 
 	private DatagramSocket socket;
 	private int receivedMessages, sentMessages, unAnsweredMessages;
@@ -100,6 +101,29 @@ public class NetworkService {
 			}
 
 		}
+	}
+	
+	public void sendstat(){
+		List<Node> nodeList = new ArrayList<>();
+
+        nodeList.add(new Node("127.0.0.1",5000));
+        nodeList.add(new Node("127.0.0.1",5001));
+        nodeList.add(new Node("127.0.0.1",5002));
+        nodeList.add(new Node("127.0.0.1",5003));
+        nodeList.add(new Node("127.0.0.1",5004));
+        nodeList.add(new Node("127.0.0.1",5005));
+        nodeList.add(new Node("127.0.0.1",5006));
+        nodeList.add(new Node("127.0.0.1",5007));
+        nodeList.add(new Node("127.0.0.1",5008));
+        nodeList.add(new Node("127.0.0.1",5009));
+        nodeList.forEach((a) -> {
+            String statmsg = Config.STAT + " " + Config.IP + " " + Config.PORT;
+            sender(statmsg, a);
+        });
+	}
+	
+	public void getSummery() throws IOException{
+		queryHandler.getSummery();
 	}
 
 	public boolean unRegister() {
@@ -433,7 +457,21 @@ public class NetworkService {
 			String timeStamp = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new Date());
 			tempnode.setUpdateTime(timeStamp);
 
-		} else {
+		}else if (Config.STAT.equals(command)) {
+            receivedMessages --;
+            String host = tokenizer.nextToken();
+			String hostport = tokenizer.nextToken();
+			Node temp = new Node(host, Integer.parseInt(hostport));
+			String statMsg = Config.STATOK + " " + getStatistics().toEncoded() + " " + Config.IP + " " + Config.PORT;
+			sender(statMsg, temp);
+			System.out.println("Stat sent");
+            sentMessages--;
+        }else if (Config.STATOK.equals(command)) {
+        	receivedMessages --;
+        	System.out.println("get stat ok");
+        	queryHandler.addtoist(tokenizer.nextToken());
+        	
+        } else {
 			unAnsweredMessages++;
 		}
 
@@ -538,6 +576,11 @@ public class NetworkService {
 			stat.setLatencyAverage(avg);
 			stat.setLatencySD(Utils.getStandardDeviation(latencyArray.toArray(), avg));
 			stat.setNumberOfLatencies(latencyArray.size());
+			String latencies="";
+            for (int latency: latencyArray){
+                latencies+=latency+",";
+            }
+            stat.setLatencies(latencies);
 
 			avg = hopArray.stream().mapToLong(val -> val).average().getAsDouble();
 			stat.setHopsMax(Collections.max(hopArray));
@@ -545,6 +588,11 @@ public class NetworkService {
 			stat.setHopsAverage(avg);
 			stat.setHopsSD(Utils.getStandardDeviation(hopArray.toArray(), avg));
 			stat.setNumberOfHope(hopArray.size());
+			String hops="";
+            for (int hop: hopArray){
+                hops+=hop+",";
+            }
+            stat.setHops(hops);
 
 		}
 		return stat;
